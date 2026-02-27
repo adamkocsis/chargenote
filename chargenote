@@ -39,16 +39,15 @@ while :; do
 				# indicate that the system was muted
 				muted=1
 				# unmute
-				amixer -D pulse sset Master on
+				amixer -D pulse sset Master on > /dev/null
 			fi
 			# run the fucking alarm!
-			vlc $audiopath --loop --volume-step 256
+			vlc $audiopath --loop --volume-step 256 > /dev/null
 			# mute back
 			if [ $muted -ge 0 ];
 			then
-				amixer -D pulse sset Master off
+				amixer -D pulse sset Master off /dev/null
 			fi
-				
 		fi
 	fi
 done
