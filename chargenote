@@ -1,9 +1,13 @@
 #!/bin/bash
 # depends on vlc, acpi, amixer (pulseaudio!)
 
-audiofile="/mnt/sky/Dropbox/System/GNU/sounds/horn-signal-quotalarmquot.mp3"
+audiofile="alarms/horn-signal-quotalarmquot.mp3"
 above=80
 sleeptime=10
+
+# the direcory in which the script is
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+audiopath=$SCRIPT_DIR/$audiofile
 
 # a continuous loop is running
 while :; do
@@ -38,7 +42,7 @@ while :; do
 				amixer -D pulse sset Master on
 			fi
 			# run the fucking alarm!
-			vlc $audiofile --loop --volume-step 256
+			vlc $audiopath --loop --volume-step 256
 			# mute back
 			if [ $muted -ge 0 ];
 			then
