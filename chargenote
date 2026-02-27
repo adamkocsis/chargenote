@@ -1,0 +1,44 @@
+#!/bin/bash
+# depends on vlc, acpi, amixer (pulseaudio!)
+
+# a continuous loop is running
+while :; do
+	# every ten seconds
+    sleep 10
+	# remove the previous battery log
+	rm /var/tmp/battlog.txt
+	# write battery state to log
+	acpi -b > /var/tmp/battlog.txt
+	# if the battery is currently charging (not charging)
+	if [ $(grep -c " charging"  /var/tmp/battlog.txt) -eq 1 ];
+	then
+		# grab only the line that describes the charging battery
+		battery=$(grep " charging" /var/tmp/battlog.txt)
+		# get the percentage
+		charged=$(echo $battery | grep -o "[0-9][0-9]\%")
+		# get a vaule
+		percentage=$(echo ${charged:0:-1})
+		# if the precentage is above 80%
+		if [ $percentage -ge 80 ];
+		then
+			# if muted
+			muted=0
+			amix=$(amixer -D pulse sget Master)
+			if [ $(echo $amix | grep -c "\[off\]") -ge 0 ];
+			then
+				# indicate that the system was muted
+				muted=1
+				# unmute
+				amixer -D pulse sset Master on
+			fi
+			# run the fucking alarm!
+			vlc /mnt/sky/Dropbox/System/GNU/sounds/horn-signal-quotalarmquot.mp3 --loop --volume-step 256
+			# mute back
+			if [ $muted -ge 0 ];
+			then
+				amixer -D pulse sset Master off
+			fi
+				
+		fi
+	fi
+done
