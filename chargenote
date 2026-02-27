@@ -4,6 +4,8 @@
 audiofile="alarms/horn-signal-quotalarmquot.mp3"
 above=80
 sleeptime=10
+audiodev=default
+# audiodev=pulse
 
 # the direcory in which the script is
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
@@ -33,20 +35,20 @@ while :; do
 		then
 			# if muted
 			muted=0
-			amix=$(amixer -D pulse sget Master)
+			amix=$(amixer -D $audiodev sget Master)
 			if [ $(echo $amix | grep -c "\[off\]") -ge 0 ];
 			then
 				# indicate that the system was muted
 				muted=1
 				# unmute
-				amixer -D pulse sset Master on > /dev/null
+				amixer -D $audiodev sset Master on > /dev/null
 			fi
 			# run the fucking alarm!
 			vlc $audiopath --loop --volume-step 256 > /dev/null
 			# mute back
 			if [ $muted -ge 0 ];
 			then
-				amixer -D pulse sset Master off /dev/null
+				amixer -D $audiodev sset Master off /dev/null
 			fi
 		fi
 	fi
