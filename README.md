@@ -12,20 +12,32 @@ This small application was developed because I got fed up that I could not find 
 - alsa mixer-amixer (optional): used to unmute the speakers so the alarm is running.
 
 
-## Installation
+## Installation and running
 
 
 1. Clone repository:
 `git clone ...`
 
-2. Move directory to whereever you want
-
-3. Use `nohup`
+2. Move directory to whereever you want. Use cd to enter the directory. Change the script to an executable with
 
 ``` sh
-nohup ./charenote
+chmod +x ./chargenote
 ```
 
+3. Single run (optional): use `nohup` to suppress the SIGHUP and put the process in the background. Change the `chargenote` variable to whereevery the `chargenote` executable is located.
+
+``` sh
+chargenote="/mnt/sky/Dropbox/System/GNU/BASH/chargenote/chargenote"
+nohup $chargenote &
+```
+
+You can kill the process by finding its process ID (PID) and then killing it:
+
+``` sh
+kill <PID>
+```
+
+4. Persistent run. Add the line above at 3. to `~/profile~` which will run the process at login.  
 
 
 
