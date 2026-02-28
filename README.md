@@ -24,7 +24,7 @@ This small application was developed because I got fed up that I could not find 
 chmod +x ./chargenote
 ```
 
-3. Single run (optional): use `nohup` to suppress the SIGHUP and put the process in the background. Change the `chargenote` variable to whereevery the `chargenote` executable is located.
+3. Single run (optional): use `nohup` to suppress the SIGHUP and put the process in the background. Change the `chargenote` variable to whereever the `chargenote` executable is located.
 
 ``` sh
 chargenote="/mnt/sky/Dropbox/System/GNU/BASH/chargenote/chargenote"
@@ -37,7 +37,7 @@ You can kill the process by finding its process ID (PID) and then killing it:
 kill <PID>
 ```
 
-4. Persistent run. Add the line above at 3. to `~/profile~` which will run the process at login.  
+4. Persistent run: Add the line above at 3. to `~/profile` which will run the process at login.  
 
 
 
