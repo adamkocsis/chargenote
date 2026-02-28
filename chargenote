@@ -1,9 +1,10 @@
 #!/bin/bash
 # depends on vlc, acpi, amixer (pulseaudio!)
 
+
 audiofile="alarms/horn-signal-quotalarmquot.mp3"
 above=80
-sleeptime=10
+sleeptime=30
 audiodev=default
 # audiodev=pulse
 
@@ -20,12 +21,12 @@ while :; do
 	# write battery state to log
 	acpi -b > /var/tmp/battlog.txt
 	# if the battery is currently charging (not charging)
-#	if [ $(grep -c "Charging"  /var/tmp/battlog.txt) -eq 1 ];
-	if [ $(grep -c " charging"  /var/tmp/battlog.txt) -eq 1 ]; # dev case: "Not charging"
+	if [ $(grep -c "Charging"  /var/tmp/battlog.txt) -eq 1 ];
+#	if [ $(grep -c " charging"  /var/tmp/battlog.txt) -eq 1 ]; # dev case: "Not charging"
 	then
 		# grab only the line that describes the charging battery
-#		battery=$(grep "Charging" /var/tmp/battlog.txt)
-		battery=$(grep " charging" /var/tmp/battlog.txt) # dev case: "Not charging"
+		battery=$(grep "Charging" /var/tmp/battlog.txt)
+#		battery=$(grep " charging" /var/tmp/battlog.txt) # dev case: "Not charging"
 		# get the percentage
 		charged=$(echo $battery | grep -o "[0-9][0-9]\%")
 		# get a vaule
@@ -34,21 +35,35 @@ while :; do
 		if [ $percentage -ge $above ];
 		then
 			# if muted
-			muted=0
+			mastermuted=0
 			amix=$(amixer -D $audiodev sget Master)
 			if [ $(echo $amix | grep -c "\[off\]") -ge 0 ];
 			then
 				# indicate that the system was muted
-				muted=1
+				mastermuted=1
 				# unmute
 				amixer -D $audiodev sset Master on > /dev/null
+			fi
+			# if muted
+			speakermuted=0
+			amix=$(amixer -D $audiodev sget Speaker)
+			if [ $(echo $amix | grep -c "\[off\]") -ge 0 ];
+			then
+				# indicate that the system was muted
+				speakermuted=1
+				# unmute
+				amixer -D $audiodev sset Speaker on > /dev/null
 			fi
 			# run the fucking alarm!
 			vlc $audiopath --loop --volume-step 256 > /dev/null
 			# mute back
-			if [ $muted -ge 0 ];
+			if [ $mastermuted -ge 0 ];
 			then
 				amixer -D $audiodev sset Master off /dev/null
+			fi
+			if [ $speakermuted -ge 0 ];
+			then
+				amixer -D $audiodev sset Speaker off /dev/null
 			fi
 		fi
 	fi

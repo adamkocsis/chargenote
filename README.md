@@ -4,7 +4,6 @@ Notify users that a charging battery has reached a given percentage (default 80%
 
 This small application was developed because I got fed up that I could not find an application that would alert me when I am charging my old tablet that it's battery would be overloaded.
 
-
 ## Requirements
 
 - acpi: used to get the battery state.
@@ -16,7 +15,7 @@ This small application was developed because I got fed up that I could not find 
 
 
 1. Clone repository:
-`git clone ...`
+`git clone https://github.com/adamkocsis/chargenote`
 
 2. Move directory to whereever you want. Use cd to enter the directory. Change the script to an executable with
 
@@ -27,7 +26,7 @@ chmod +x ./chargenote
 3. Single run (optional): use `nohup` to suppress the SIGHUP and put the process in the background. Change the `chargenote` variable to whereevery the `chargenote` executable is located.
 
 ``` sh
-chargenote="/mnt/sky/Dropbox/System/GNU/BASH/chargenote/chargenote"
+chargenote="/mnt/sky/Dropbox/System/GNU/chargenote/chargenote"
 nohup $chargenote &
 ```
 
@@ -39,6 +38,8 @@ kill <PID>
 
 4. Persistent run. Add the line above at 3. to `~/profile~` which will run the process at login.  
 
+## Configuration
 
+You can put the alarm sounds in the `alarms` directory, and modify the `chargenote` file. 
 
 
